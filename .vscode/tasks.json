@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Check Problems",
+            "type": "shell",
+            "command": "cat",
+            "args": ["/opt/airflow/logs_errors/propose_splines_task_error.log"],
+            "problemMatcher": {
+                "owner": "python",
+                "fileLocation": ["absolute"],
+                "pattern": {
+                    "regexp": "^\\s*File \"(.*)\", line (\\d+),.*$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "isBackground": true
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "name": "Airflow DEV Container",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "airflow",
+    "workspaceFolder": "/app",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.pylance",
+                "ms-python.debugpy"
+            ]
+        }
+    }
+}

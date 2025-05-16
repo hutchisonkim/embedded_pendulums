@@ -1,0 +1,77 @@
+services: 
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - AIRFLOW_CONFIG=/opt/airflow/airflow.cfg
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=mysql+pymysql://root:rootpassword@mysql:3306/airflow_db
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      # - AIRFLOW__CORE__EXECUTOR=DebugExecutor
+      - AIRFLOW__DEBUG__FAIL_FAST=True
+      - AIRFLOW_CONN_FS_DEFAULT=fs://
+      - MYSQLCLIENT_CFLAGS=-I/usr/include/mysql
+      - MYSQLCLIENT_LDFLAGS=-L/usr/lib/mysql
+      - KAFKA_BROKER=broker:9092
+    volumes:
+      - ./data:/data
+      - ./logs:/opt/airflow/logs
+      - ./src:/src
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - broker
+    networks:
+      - rmoff_kafka
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=airflow_db
+      - MYSQL_INITDB_SKIP_TZINFO=1
+      - MYSQL_TCP_PORT=3306
+      - MYSQL_MAX_CONNECTIONS=1000
+      - MYSQL_WAIT_TIMEOUT=28800
+      - MYSQL_INTERACTIVE_TIMEOUT=28800
+    command: --sql-mode=""
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - rmoff_kafka
+
+  broker:
+    image: confluentinc/cp-kafka:5.5.0
+    container_name: broker
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,CONNECTIONS_FROM_HOST://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "19092:19092"
+    depends_on:
+      - zookeeper
+    networks:
+      - rmoff_kafka
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - rmoff_kafka
+
+networks:
+  rmoff_kafka:
+    driver: bridge
+
+volumes:
+  mysql_data:

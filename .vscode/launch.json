@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to debugpy",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/opt/airflow"
+                }
+            ]
+        },
+        {
+            "name": "Airflow DAG Debugger: Python File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "AIRFLOW__CORE__EXECUTOR": "DebugExecutor",
+                "AIRFLOW__CORE__LOAD_EXAMPLES": "False",
+                "AIRFLOW_HOME": "/opt/airflow",
+                "PYTHONNOUSERSITE": "1"
+            }
+        }
+    ]
+}

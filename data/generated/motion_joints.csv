@@ -1,0 +1,5 @@
+motion_id,joint_index,position_x,orientation_amplitude,orientation_phase,orientation_phase_offset
+motion_0,0,0.0,0.2,6.283185307179586,0.0
+motion_0,1,1.0,0.2,6.283185307179586,0.0
+motion_0,2,1.0,0.2,6.283185307179586,0.0
+motion_0,3,1.0,0.0,0.0,0.0
