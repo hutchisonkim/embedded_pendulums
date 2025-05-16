@@ -2,14 +2,9 @@ import os
 import argparse
 import matplotlib.pyplot as plt
 import colorsys
-import numpy as np
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, collect_list, struct, explode, lit, when, row_number
-from pyspark.sql.types import StringType
-from pyspark.sql import functions as F
+from pyspark.sql.functions import collect_list, struct
 from spark.base_gen import BaseGenerator
-from matplotlib.collections import PolyCollection
-from matplotlib.colors import Normalize, LinearSegmentedColormap
 
 class CurvaturePreviewGen(BaseGenerator):
 

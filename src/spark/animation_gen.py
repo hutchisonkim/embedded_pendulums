@@ -6,7 +6,6 @@ from spark.base_gen import BaseGenerator
 
 class AnimationGenerator(BaseGenerator):
 
-    #TODO: refactor roots as a zero-amplitude sine wave with a offset, where the phase offset is the root orientation. this will allow for a more general solution to the problem of unparenting.
     def _translate(self, animation_roots: DataFrame) -> DataFrame:
 
         animation_roots = animation_roots \

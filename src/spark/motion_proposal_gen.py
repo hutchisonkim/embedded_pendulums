@@ -1,8 +1,6 @@
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-import os
-import shutil
 from spark.base_gen import BaseGenerator
 
 class MotionProposalGenerator(BaseGenerator):

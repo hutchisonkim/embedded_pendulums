@@ -204,10 +204,8 @@ class BisectorPreviewApp:
         self.generator = BisectorPreviewGenerator(self.spark)
 
     def run(self, args):
-        # Read the animations JSON file
 
-
-        # Read the peaks CSV file
+        # Extract
         frames = self.generator.read_csv(args.in_animation_frames_csv_filepath)
         effectors = self.generator.read_csv(args.in_animation_effectors_csv_filepath)
         curvatures = self.generator.read_csv(args.in_path_curvatures_csv_filepath)
@@ -215,7 +213,7 @@ class BisectorPreviewApp:
         tangents = self.generator.read_csv(args.in_path_curvature_tangents_csv_filepath)
         bisectors = self.generator.read_csv(args.in_path_bisectors_csv_filepath)
 
-        # Generate previews with peaks
+        # Transform & Load
         self.generator.generate_previews_with_peaks(frames, effectors, curvatures, peaks, tangents, bisectors, args.out_previews_dir)
 
 def main():

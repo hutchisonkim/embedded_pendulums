@@ -1,15 +1,9 @@
 import os
 import argparse
 import matplotlib.pyplot as plt
-import colorsys
 import numpy as np
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, collect_list, struct, explode, lit, when, row_number
-from pyspark.sql.types import StringType
-from pyspark.sql import functions as F
 from spark.base_gen import BaseGenerator
-from matplotlib.collections import PolyCollection
-from matplotlib.colors import Normalize, LinearSegmentedColormap
 
 class AggregatePreviewGen(BaseGenerator):
 
@@ -25,8 +19,6 @@ class AggregatePreviewGen(BaseGenerator):
 
         for animation_id in animation_ids:
             final_image = None
-            #initialize the final image to a size that is large enough to hold all the images
-            # for example, if each image is 100x100 and there are 4 images, the final image should be 200x200
             final_image_width = 0
             final_image_height = 0
             images = []
@@ -35,10 +27,8 @@ class AggregatePreviewGen(BaseGenerator):
                 image_path = os.path.join(output_dir, f"{asset}_preview__{animation_id}.png")
                 if os.path.exists(image_path):
                     print(f"Loading image for animation_id {animation_id} from {image_path}")
-                    # load the image and convert RGBA to RGB if necessary
                     image = plt.imread(image_path)
                     images.append(image)
-                    # update the final image size
                     final_image_width = max(final_image_width, image.shape[1])
                     final_image_height += image.shape[0]
 
@@ -57,9 +47,6 @@ class AggregatePreviewGen(BaseGenerator):
                         image = image[:, :, :3]  # Discard alpha channel
 
                     height, width, _ = image.shape
-                    #non-centered horizontally:
-                    # final_image[y_offset:y_offset + height, :width, :3] = image
-                    #centered horizontally:
                     x_offset = (final_image_width - width) // 2
                     final_image[y_offset:y_offset + height, x_offset:x_offset + width, :3] = image
                     y_offset += height
@@ -67,14 +54,9 @@ class AggregatePreviewGen(BaseGenerator):
                 # Set alpha channel to fully opaque
                 final_image[:, :, 3] = 255
 
-                # Debug final image properties
-                print(f"Final image shape: {final_image.shape}, dtype: {final_image.dtype}")
-                print(f"Pixel range: {final_image.min()} - {final_image.max()}")
-
                 # Save the final image, scaling if necessary
                 final_image_path = os.path.join(output_dir, f"aggregate_preview__{animation_id}.png")
                 plt.imsave(final_image_path, final_image)
-                print(f"Saved aggregate preview for animation_id {animation_id} at {final_image_path}")
 
 class AggregatePreviewGenApp:
     def __init__(self):

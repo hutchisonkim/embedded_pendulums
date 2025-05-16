@@ -46,7 +46,6 @@ class AnimationProposalGenerator(BaseGenerator):
     
     def refine(self, animations: DataFrame):
 
-        #TODO: rethink max_effector_index now that we have a hierarchical implementation to effector evaluation, where evaluating the effector of a joint does not require evaluating the effector of its ancestor joints. this means keeping the effector index. note however that for oscillations, we need can use something like max_effector_index (max_oscillation_index) since all ancestors are evaluated in the same frame.
         pivots = animations \
             .filter((F.col("is_positive_peak") | F.col("is_negative_peak") | F.col("is_crossover"))) \
             .withColumn("lod_index", F.expr("lod_index + 1")) \

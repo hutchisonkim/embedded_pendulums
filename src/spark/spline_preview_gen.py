@@ -2,10 +2,8 @@ import os
 import argparse
 import matplotlib.pyplot as plt
 import colorsys
-import numpy as np
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, collect_list, struct, explode, lit, when, row_number
-from pyspark.sql.types import StringType
+from pyspark.sql.functions import col, collect_list, struct, when
 from pyspark.sql import functions as F
 from spark.base_gen import BaseGenerator
 
@@ -274,10 +272,8 @@ class SplinePreviewApp:
         self.generator = SplinePreviewGenerator(self.spark)
 
     def run(self, args):
-        # Read the animations JSON file
 
-
-        # Read the peaks CSV file
+        # Extract
         frames = self.generator.read_csv(args.in_animation_frames_csv_filepath)
         effectors = self.generator.read_csv(args.in_animation_effectors_csv_filepath)
         curvatures = self.generator.read_csv(args.in_path_curvatures_csv_filepath)
@@ -285,7 +281,7 @@ class SplinePreviewApp:
         tangents = self.generator.read_csv(args.in_path_curvature_tangents_csv_filepath)
         bisectors = self.generator.read_csv(args.in_path_bisectors_csv_filepath)
 
-        # Generate previews with peaks
+        # Transform & Load
         self.generator.generate_previews_with_peaks(frames, effectors, curvatures, peaks, tangents, bisectors, args.out_previews_dir)
 
 def main():
