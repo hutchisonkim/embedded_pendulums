@@ -36,7 +36,7 @@ Embedded Pendulums is a data pipeline to experiment with the relationship betwee
 
 1. Clone the repository:
    ~~~bash
-   git clone https://github.com/hutchisonkim/effector_transformations.git
+   git clone https://github.com/hutchisonkim/embedded_pendulums.git
    ~~~
 
 2. Build and start the container:

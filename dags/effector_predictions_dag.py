@@ -41,9 +41,9 @@ PATHS = {
 
 # DAG Definition
 with DAG(
-    "effector_transformations_development_dag",
+    "embedded_pendulums_development_dag",
     default_args=default_args,
-    description="Development DAG for Effector Transformations",
+    description="Embedded Pendulums Development DAG",
     schedule_interval="@once",
     catchup=False
 ) as dag:
