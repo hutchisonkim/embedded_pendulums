@@ -1,5 +1,7 @@
 
 
+![Output Preview](docs/embedded_pendulums.png)
+
     Change Log
     ===========
 
@@ -73,6 +75,6 @@ Embedded Pendulums is a data pipeline to experiment with the relationship betwee
 
 
 
-## ✒️ Output Preview
+## 📼 DAG Preview
 
-![Output Preview](docs/embedded_pendulums.png)
+![DAG Preview](docs/embedded_pendulums_dag.png)
