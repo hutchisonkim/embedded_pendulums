@@ -3,7 +3,9 @@
     Change Log
     ===========
 
-    2025-05-16: Initial release of the repository.
+    2025-05-16: Initial release.
+    2025-05-16: Cleanup and minor tweaks.
+
 
 ## ⚛️ Embedded Pendulums
 
@@ -57,20 +59,20 @@ Embedded Pendulums is a data pipeline to experiment with the relationship betwee
 
 ##  ✒️ Dev Features
 
-- ### [Hot Reload] Sensor DAG Tasks
+- ### Hot Reload DAG
 
     Sensor tasks are used to monitor changes in the code files. When a change is detected, the DAG is reloaded, and the pipeline is re-evaluated. This allows for rapid iteration and testing of new features without needing to restart the entire pipeline.
-
-- ### [Hot Reload] Forever Notebook
-
-    Bypassing the DAG, you can use the development notebook at `/notebooks/embedded_pendulums_notebook.ipynb` to run tasks and monitor code files as you make changes to them.
-    
-- ### [QA] Unit Test Tasks
+   
+- ### Test Tasks
 
     Between each sensor and generator task pair is a test task to catch any failure introduced by the code file changes detected by the sensor task.
 
-- ### [QA] Data Validation Tasks
+- ### Validation Tasks
 
     After each generator task is a validator task that checks the generated data against its schema.
 
 
+
+## ✒️ Output Preview
+
+![Output Preview](docs/embedded_pendulums.png)
