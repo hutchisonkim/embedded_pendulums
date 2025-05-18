@@ -12,11 +12,9 @@
 ## ⚛️ Embedded Pendulums
 
 
-Embedded Pendulums is a data pipeline to experiment with the relationship between rotational motion and the curvature of its resulting translational path. Key aspects of the approach include:
+Embedded Pendulums is a data pipeline to experiment with joints in motion and the path of their effectors.
 
-1. **Distributed Processing**: Spark SQL commands are used to process rotation and translation data across multiple nodes for high performance.
-2. **Serialization**: Intermediate data is serialized into CSV files, ensuring compatibility and portability between tasks.
-3. **B-Spline Representation**: Curvature data is processed to derive a basis spline model, which can be used for further analysis and visualization.
+The pipeline is designed to be run in a Docker container and uses Apache Airflow for orchestration. It processes data from multiple pendulums, simulating their motion and generating visualizations of their paths.
 
 
 ## 📂 Repository Contents
