@@ -66,7 +66,7 @@ It runs in a Docker container and uses Apache Airflow for orchestration. It proc
 
 - ### Validation Tasks
 
-    After each generator task is a validator task that checks the generated data against its schema.
+    After each generator task is a validator task that checks the generated data against its schema and other defined expectations.
 
 - ### Hot Reload DAG
 
