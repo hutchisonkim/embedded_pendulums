@@ -6,7 +6,7 @@
     ===========
 
     2025-05-16: Initial release.
-    2025-05-16: Cleanup and minor tweaks.
+    2025-05-17: Cleanup and minor tweaks.
 
 
 ## ⚛️ Embedded Pendulums
