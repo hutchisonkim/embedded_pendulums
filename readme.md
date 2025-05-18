@@ -6,7 +6,6 @@
     ===========
 
     2025-05-16: Initial release.
-    2025-05-17: Cleanup and minor tweaks.
 
 
 ## ⚛️ Embedded Pendulums
@@ -14,7 +13,9 @@
 
 Embedded Pendulums is a data pipeline to experiment with joints in motion and the path of their effectors.
 
-The pipeline is designed to be run in a Docker container and uses Apache Airflow for orchestration. It processes data from multiple pendulums, simulating their motion and generating visualizations of their paths.
+The pipeline is designed to be modular and extensible, allowing for easy addition of new tasks.
+
+It runs in a Docker container and uses Apache Airflow for orchestration. It processes data using a tabular approach with pySpark SQL statements.
 
 
 ## 📂 Repository Contents
