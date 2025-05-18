@@ -61,10 +61,6 @@ Embedded Pendulums is a data pipeline to experiment with the relationship betwee
 
 ##  ✒️ Dev Features
 
-- ### Hot Reload DAG
-
-    Sensor tasks are used to monitor changes in the code files. When a change is detected, the DAG is reloaded, and the pipeline is re-evaluated. This allows for rapid iteration and testing of new features without needing to restart the entire pipeline.
-   
 - ### Test Tasks
 
     Between each sensor and generator task pair is a test task to catch any failure introduced by the code file changes detected by the sensor task.
@@ -73,7 +69,10 @@ Embedded Pendulums is a data pipeline to experiment with the relationship betwee
 
     After each generator task is a validator task that checks the generated data against its schema.
 
+- ### Hot Reload DAG
 
+    Sensor tasks are used to monitor changes in the code files. When a change is detected, the downstream tasks get cleared, causing a partial rerun of the DAG.
+   
 
 ## 📼 DAG Preview
 
