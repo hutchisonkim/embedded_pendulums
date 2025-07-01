@@ -1,0 +1,148 @@
+experiment:
+  name: "Curvature Root Finder Experiment"
+  description: "Framework to find zero-crossovers using structured actions, rewards, and policies."
+
+state:
+  description: "System state representation."
+  list:
+    - name: sample_moments
+      type: array
+      description: "Moments in time for sampling."
+      default: []
+    - name: sample_positions
+      type: array
+      description: "Positions corresponding to sample_moments."
+      default: []
+    - name: curvature_sample_indices
+      type: array
+      description: "Indices forming curvature samples."
+      default: []
+    - name: curvature_magnitudes
+      type: array
+      description: "Magnitudes of curvature for each sample trio."
+      default: []
+    - name: lowest_curvature_magnitude
+      type: float
+      description: "Smallest curvature magnitude found in this iteration."
+      default: null
+    - name: curvature_sign_change
+      type: boolean
+      description: "Indicates if a sign change exists in the curvature array."
+      default: false
+    - name: guessed_zero_crossing
+      type: float
+      description: "Predicted moment for the zero crossing, if applicable."
+      default: null
+    - name: verified_guessed_zero_crossing
+      type: boolean
+      description: "Validation result of the guessed zero-crossing."
+      default: null
+    - name: true_zero_crossing
+      type: float
+      description: "Actual zero-crossing value (hidden during the experiment)."
+      default: null
+    - name: action_taken
+      type: string
+      description: "Action taken in the current iteration."
+      default: null
+
+actions:
+  description: "Definitions of available actions with explicit conditions and rewards."
+  list:
+
+    - id: "add_4_samples"
+      tasks:
+        - "add_4_samples__embedded"
+        - "add_4_samples__equidistant"
+      description: "Add 4 samples equidistant in time to form 2 consecutive curvatures."
+      conditions:
+        - "len(state.curvature_magnitudes) == 0"
+      rewards:
+        - formula: "0"
+          formula_explanation: >
+            Immediate reward is neutral as this action sets up initial sampling.
+        - formula: "5 if state.verified_guessed_zero_crossing else -5"
+          defer_conditions:
+            - "state.verified_guessed_zero_crossing is not None"
+          formula_explanation: >
+            Reward for validated guesses based on this action.
+        - formula: "15 / (1 + abs(state.verified_guessed_zero_crossing - state.true_zero_crossing))"
+          defer_conditions:
+            - "state.verified_guessed_zero_crossing is not None"
+            - "state.true_zero_crossing is not None"
+          formula_explanation: >
+            Final evaluation reward/penalty based on how close the best guess is to the true zero-crossing.
+            Larger reward/penalty compared to simpler actions due to the higher complexity of this action.
+
+    - id: "make_guess"
+      tasks:
+        - "make_guess__bounded"
+        - "make_guess__unbounded"
+      description: "Make a guess for the zero crossing using curvatures."
+      conditions:
+        - "len(state.curvature_magnitudes) >= 2"
+        - "state.guessed_zero_crossing is not None"
+      rewards:
+        - formula: "0"
+          formula_explanation: >
+            Immediate reward is neutral since this action only generates a guess.
+        - formula: "5 if state.verified_guessed_zero_crossing else -5"
+          defer_conditions:
+            - "state.verified_guessed_zero_crossing is not None"
+          formula_explanation: >
+            Reward for validated guesses based on this action.
+        - formula: "15 / (1 + abs(state.verified_guessed_zero_crossing - state.true_zero_crossing))"
+          defer_conditions:
+            - "state.verified_guessed_zero_crossing is not None"
+            - "state.true_zero_crossing is not None"
+          formula_explanation: >
+            Deferred reward/penalty based on how close the best guess is to the true zero-crossing.
+            Larger reward/penalty compared to simpler actions due to the higher complexity of this action.
+
+    - id: "add_4_samples_at_guess__bounded"
+      tasks:
+        - "add_4_samples_at_guess__bounded__embedded"
+        - "add_4_samples_at_guess__bounded__equidistant"
+      description: "Add samples near the guess when curvature_sign_change is true."
+      conditions:
+        - "state.curvature_sign_change is True"
+        - "state.guessed_zero_crossing is not None"
+      rewards:
+        - formula: "5"
+          formula_explanation: >
+            Encourages refining bounds for zero crossing with valid curvatures.
+
+    - id: "add_4_samples_at_guess__unbounded"
+      tasks:
+        - "add_4_samples_at_guess__unbounded__embedded"
+        - "add_4_samples_at_guess__unbounded__equidistant"
+      description: "Add samples near the guess when curvature_sign_change is false."
+      conditions:
+        - "state.curvature_sign_change is False"
+        - "state.guessed_zero_crossing is not None"
+      rewards:
+        - formula: "5"
+          formula_explanation: >
+            Encourages further exploration to establish valid bounds.
+
+policies:
+  description: "Policies for selecting actions and balancing exploration and exploitation."
+  list:
+    - method: "epsilon_greedy"
+      parameters:
+        epsilon: 0.2
+        description: "Probability of exploring a random action during exploration."
+    - method: "max_reward"
+      parameters:
+        decay: 0.95
+        description: "Reward decay factor to prioritize recent rewards during exploitation."
+
+experiment_parameters:
+  max_iterations: 100
+  convergence_threshold: 1e-6
+  description: "Parameters controlling experiment execution and sampling resolution."
+
+logging:
+  enabled: true
+  level: "INFO"
+  output_path: "/logs/experiment_logs/"
